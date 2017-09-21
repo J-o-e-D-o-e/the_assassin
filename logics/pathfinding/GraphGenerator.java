@@ -41,7 +41,7 @@ public class GraphGenerator {
                     if (layer.getCell(x, (y - 1)) == null && y != 0) { // S
                         currentNode.addConnection(nodes.get(x + mapWidth * (y - 1)));
                     }
-                    if (layer.getCell((x + 1), y) == null && x != mapWidth - 1) { // O
+                    if (layer.getCell((x + 1), y) == null && x != mapWidth - 1) { // E
                         currentNode.addConnection(nodes.get((x + 1) + mapWidth * y));
                     }
                     if (otherEnemies.size != 0) {
