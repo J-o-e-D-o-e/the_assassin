@@ -1,0 +1,20 @@
+<root>
+    <stage2>
+        When Sneaky Pete sees NAME, he immediately grabs his weapon and starts to shoot. Someone must have warned him.
+        Get ready to fightController.
+    </stage2>
+    <stage4>
+        When NAME enters the residency of Carla Montepulciano, she already awaits HIMHER. With a smirky, yet excited
+        expression on her face she tells HIMHER that HESHE is going to die now. Get ready to fightController.
+    </stage4>
+       <stage8>
+        When NAME arrives at his majestic residency, the Ghost welcomes HIMHER with a grinning smile standing behind two
+        of his bodyguards. He shouts that NAME will never leave this place alive and takes the backdoor. Obviously, the
+        Ghost is trying to flee. Take care of his guards.
+    </stage8>
+       <stage10>
+        The Ghost has almost reached the railway station. But when he sees NAME racing after him, he shouts that HESHE
+        is going to pay now for the murder of his girlfriend. He turns around furiously willing to end this once and for
+        all. Get ready for the final battle.
+    </stage10>
+</root>
