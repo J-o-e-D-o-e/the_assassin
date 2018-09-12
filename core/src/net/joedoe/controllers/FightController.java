@@ -8,7 +8,6 @@ import net.joedoe.entities.*;
 import net.joedoe.maps.MapController;
 import net.joedoe.pathfinding.Graph;
 import net.joedoe.pathfinding.Node;
-import net.joedoe.utils.GameInfo;
 import net.joedoe.utils.GameManager;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class FightController {
-    private Player player;
+    private Player player = GameManager.player;
     private List<Enemy> enemies = new ArrayList<>();
     private List<Bullet> bullets = new ArrayList<>();
     private MapController mapController;
@@ -26,65 +25,14 @@ public class FightController {
 
     public FightController() {
         mapController = new MapController();
-        initializePlayer();
         List<Enemy> enemies = EnemyFactory.createEnemies();
         initializeEnemies(enemies);
-    }
-
-    private void initializePlayer() {
-        player = GameManager.player;
-        player.setX(11 * GameInfo.ONE_TILE);
-        player.setY(17 * GameInfo.ONE_TILE);
-        player.setActionPointsToDefault();
-        player.setTurnOver(false);
     }
 
     private void initializeEnemies(List<Enemy> enemies) {
         for (Enemy enemy : enemies)
             if (mapController.currentTileIsAccessible(enemy.getX(), enemy.getY()))
                 this.enemies.add(enemy);
-    }
-
-    public void playerMoves(int direction) {
-        player.setDirection(direction);
-        if (mapController.nextTileIsAccessible(player) && !playerCollidesWithEnemy())
-            player.move();
-    }
-
-    private boolean playerCollidesWithEnemy() {
-        float[] nextTile = mapController.getCoordinatesOfNextTile(player);
-        return enemies.stream().anyMatch(enemy -> enemy.getX() == nextTile[0] && enemy.getY() == nextTile[1]);
-    }
-
-    public void playerAttacks(int direction) {
-        player.setDirection(direction);
-        if (player.checkIfShoot()) {
-            bullets.add(player.shoot());
-            return;
-        }
-        if (player.checkIfHit()) {
-            float[] nextTile = mapController.getCoordinatesOfNextTile(player);
-            for (Enemy enemy : enemies)
-                if (nextTile[0] == enemy.getX() && nextTile[1] == enemy.getY()) {
-                    int damage = player.hit();
-                    enemy.isHitBy(damage);
-                    if (damage != 0)
-                        message = enemy.getName() + " is hit! Damage: " + damage;
-                }
-        }
-    }
-
-    public void playerChangesWeapon(int choice) {
-        if (player.getWeapons()[choice] != null)
-            player.changeWeapon(choice);
-    }
-
-    public void playerReloads(){
-        player.reload();
-    }
-
-    public void playerEndsTurn(){
-        player.endTurn();
     }
 
     public void updateEnemies() {
@@ -163,8 +111,25 @@ public class FightController {
         return bullets.isEmpty();
     }
 
-    public boolean playersTurnOver() {
-        return player.isTurnOver();
+    public List<? extends MapEntity> getBullets() {
+        return bullets;
+    }
+
+    public List<? extends MapEntity> getEnemiesHit() {
+        List<Enemy> enemiesHit = enemies.stream().filter(Enemy::isHit).collect(Collectors.toCollection(ArrayList::new));
+        enemiesHit.forEach(enemy -> enemy.setHit(false));
+        return enemiesHit;
+    }
+
+    public boolean enemiesAreDead() {
+        enemies = enemies.stream().filter(enemy -> !enemy.isDead()).collect(Collectors.toCollection(ArrayList::new));
+        return enemies.isEmpty();
+    }
+
+    public List<DefaultGraphPath<Node>> getPaths() {
+        List<DefaultGraphPath<Node>> paths = new ArrayList<>();
+        enemies.forEach(enemy -> paths.add(enemy.getPath()));
+        return paths;
     }
 
     public boolean enemiesTurnOver() {
@@ -175,40 +140,8 @@ public class FightController {
         enemies.forEach(Enemy::reset);
     }
 
-    public boolean playerIsDead() {
-        return player.isDead();
-    }
-
-    public boolean enemiesAreDead() {
-        enemies = enemies.stream().filter(enemy -> !enemy.isDead()).collect(Collectors.toCollection(ArrayList::new));
-        return enemies.isEmpty();
-    }
-
-    public boolean playerHit() {
-        boolean playerIsHit = player.isHit();
-        if (playerIsHit)
-            player.setHit(false);
-        return playerIsHit;
-    }
-
-    public List<? extends MapEntity> getEnemiesHit() {
-        List<Enemy> enemiesHit = enemies.stream().filter(Enemy::isHit).collect(Collectors.toCollection(ArrayList::new));
-        enemiesHit.forEach(enemy -> enemy.setHit(false));
-        return enemiesHit;
-    }
-
     public List<? extends MapEntity> getEnemies() {
         return enemies;
-    }
-
-    public List<? extends MapEntity> getBullets() {
-        return bullets;
-    }
-
-    public List<DefaultGraphPath<Node>> getPaths() {
-        List<DefaultGraphPath<Node>> paths = new ArrayList<>();
-        enemies.forEach(enemy -> paths.add(enemy.getPath()));
-        return paths;
     }
 
     public TiledMap getMap() {

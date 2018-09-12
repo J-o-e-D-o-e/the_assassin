@@ -26,9 +26,9 @@ public class FightControllerEnemyTest {
     private FightController controller;
     @Mock
     private MapController mapController;
-    private static Graph graph;
+    private Player player;
     private Enemy enemy;
-    private int initialAp;
+    private static Graph graph;
 
     @SuppressWarnings("Duplicates")
     @BeforeClass
@@ -46,7 +46,9 @@ public class FightControllerEnemyTest {
         controller = new FightController();
         controller.setMapController(mapController);
         enemy = (Enemy) controller.getEnemies().get(0);
-        initialAp = enemy.getActionPoints();
+        player = controller.getPlayer();
+        player.setX(11 * GameInfo.ONE_TILE);
+        player.setY(17 * GameInfo.ONE_TILE);
     }
 
     @Test
@@ -77,6 +79,7 @@ public class FightControllerEnemyTest {
         //given: short on loaded pistol ammo
         Weapon weapon = enemy.getActiveWeapon();
         weapon.setLoadedAmmo(2);
+        int initialAp = enemy.getActionPoints();
         //when
         when(mapController.generateGraph()).thenReturn(graph);
         controller.updateEnemies();
@@ -90,13 +93,13 @@ public class FightControllerEnemyTest {
         //given: player stands right before enemy, no pistol ammo
         float x = enemy.getX();
         float y = enemy.getY();
-        Player player = controller.getPlayer();
         int initialHealth = player.getHealth();
         player.setX(x - GameInfo.ONE_TILE);
         player.setY(y);
         Weapon pistol = enemy.getActiveWeapon();
         pistol.setAmmoStock(0);
         pistol.setLoadedAmmo(0);
+        int initialAp = enemy.getActionPoints();
         //when
         when(mapController.generateGraph()).thenReturn(graph);
         controller.updateEnemies();
@@ -114,7 +117,6 @@ public class FightControllerEnemyTest {
         float y = enemy.getY();
         enemy.setX(x - GameInfo.ONE_TILE);
         enemy.setY(y + GameInfo.ONE_TILE);
-        Player player = controller.getPlayer();
         player.setX(x - 5 * GameInfo.ONE_TILE);
         player.setY(y + 2 * GameInfo.ONE_TILE);
         Weapon pistol = enemy.getActiveWeapon();
@@ -135,6 +137,7 @@ public class FightControllerEnemyTest {
         float x = enemy.getX() - GameInfo.ONE_TILE;
         enemy.setX(x);
         float y = enemy.getY();
+        int initialAp = enemy.getActionPoints();
         //when
         when(mapController.generateGraph()).thenReturn(graph);
         controller.updateEnemies();
@@ -147,7 +150,6 @@ public class FightControllerEnemyTest {
     @Test
     public void updateEnemyNoAp() {
         //given: no ap
-        Player player = controller.getPlayer();
         enemy.setActionPoints(0);
         //when
         when(mapController.generateGraph()).thenReturn(graph);

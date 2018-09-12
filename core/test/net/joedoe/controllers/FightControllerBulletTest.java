@@ -92,7 +92,6 @@ public class FightControllerBulletTest {
         when(mapController.getCoordinatesOfNextTile(bullet)).thenReturn(nextTile);
         controller.updateBullets();
         //then: bullet moved
-        assertTrue(controller.getBullets().contains(bullet));
         assertEquals(nextTile[0], bullet.getX(),0.001);
         assertEquals(nextTile[1], bullet.getY(), 0.001);
         assertEquals(playerHealth, player.getHealth());

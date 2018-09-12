@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import lombok.Getter;
 import net.joedoe.GameMain;
 import net.joedoe.controllers.FightController;
+import net.joedoe.controllers.PlayerController;
 import net.joedoe.entities.MapEntity;
 import net.joedoe.gui_elements.FightPanel;
 import net.joedoe.gui_elements.PausePanel;
@@ -46,6 +47,7 @@ public class FightScreen implements IScreen {
     protected PauseListener pauseListener;
     protected StoryListener storyListener;
     protected FightController fightController;
+    protected PlayerController playerController;
     protected float enemyTimer, bulletTimer;
 
     public FightScreen(GameMain game) {
@@ -54,7 +56,6 @@ public class FightScreen implements IScreen {
         camera.setToOrtho(false, WIDTH, HEIGHT);
         camera.position.set(WIDTH / 2f, HEIGHT / 2f, 0);
         viewport = new StretchViewport(WIDTH, HEIGHT, camera);
-        fightController = new FightController();
         fightPanel = new FightPanel(this.game);
         pausePanel = new PausePanel(this.game);
         pauseListener = new PauseListener(this);
@@ -65,9 +66,11 @@ public class FightScreen implements IScreen {
         bulletVerticalTexture = new Texture("entities/bullet_vertical.png");
         bulletHorizontalTexture = new Texture("entities/bullet_horizontal.png");
         hitTexture = new Texture("entities/actorIsHit.png");
+        fightController = new FightController();
+        playerController = new PlayerController(fightController);
         mapRenderer = new OrthogonalTiledMapRenderer(fightController.getMap(), SCALE);
         shapeRenderer = new ShapeRenderer();
-        Gdx.input.setInputProcessor(new InputListenerFight(fightController));
+        Gdx.input.setInputProcessor(new InputListenerFight(playerController));
     }
 
     @Override
@@ -100,7 +103,7 @@ public class FightScreen implements IScreen {
         pauseListener.handleUserInput();
         if (!GameManager.storyMode && !GameManager.isPaused) {
             fightPanel.update(fightController.getMessage());
-            if (!fightController.playersTurnOver() && fightController.enemiesTurnOver())
+            if (!playerController.isTurnOver() && fightController.enemiesTurnOver())
                 fightController.enemiesReset();
             bulletTimer += delta;
             if (bulletTimer >= 0.1 && !fightController.bulletsIsEmpty()) {
@@ -108,11 +111,11 @@ public class FightScreen implements IScreen {
                 fightController.updateBullets();
             }
             enemyTimer += delta;
-            if (enemyTimer >= 0.2 && fightController.playersTurnOver() && fightController.bulletsIsEmpty()) {
+            if (enemyTimer >= 0.2 && playerController.isTurnOver() && fightController.bulletsIsEmpty()) {
                 enemyTimer = 0;
                 fightController.updateEnemies();
             }
-            if (fightController.playerIsDead()) {
+            if (playerController.isDead()) {
                 dispose();
                 game.setScreen(new GameOver(game));
             }
@@ -125,7 +128,7 @@ public class FightScreen implements IScreen {
 
     private void renderPlayer() {
         MapEntity player = fightController.getPlayer();
-        if (fightController.playerHit())
+        if (playerController.isHit())
             game.getBatch().draw(hitTexture, player.getX(), player.getY(), ONE_TILE, ONE_TILE);
         else
             game.getBatch().draw(playerTexture, player.getX(), player.getY(), ONE_TILE, ONE_TILE);

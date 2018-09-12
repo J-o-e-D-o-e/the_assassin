@@ -102,9 +102,10 @@ public class Enemy extends EnemyEntity {
 
     public void isHitBy(int damage) {
         health -= damage;
-        if (health <= 0)
+        if (health <= 0) {
             dead = true;
-        else
+            actionPoints = 0;
+        } else
             hit = true;
     }
 

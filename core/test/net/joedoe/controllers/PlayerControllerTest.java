@@ -1,8 +1,8 @@
 package net.joedoe.controllers;
 
 import net.joedoe.GdxTestRunner;
+import net.joedoe.entities.Bullet;
 import net.joedoe.entities.Enemy;
-import net.joedoe.entities.MapEntity;
 import net.joedoe.entities.Player;
 import net.joedoe.maps.MapController;
 import net.joedoe.utils.GameInfo;
@@ -20,12 +20,14 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(GdxTestRunner.class)
-public class FightControllerPlayerTest {
-    private FightController controller;
+public class PlayerControllerTest {
+    private PlayerController controller;
+    private FightController fightController;
     @Mock
     private MapController mapController;
     private Player player;
     private Enemy enemy;
+    private List<Bullet> bullets;
 
     @BeforeClass
     public static void setUpClass() {
@@ -34,13 +36,16 @@ public class FightControllerPlayerTest {
         GameManager.storyStage = 2;
     }
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new FightController();
+        fightController = new FightController();
+        controller = new PlayerController(fightController);
         controller.setMapController(mapController);
         player = controller.getPlayer();
-        enemy = (Enemy) controller.getEnemies().get(0);
+        enemy = (Enemy) fightController.getEnemies().get(0);
+        bullets = (List<Bullet>) fightController.getBullets();
     }
 
     @Test
@@ -50,7 +55,7 @@ public class FightControllerPlayerTest {
         //when
         when(mapController.nextTileIsAccessible(player)).thenReturn(true);
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.playerMoves(1);
+        controller.move(1);
         //then: player moved, playerCollidesWithEnemy() executed
         assertEquals(nextTile[0], player.getX(), 0.001);
         assertEquals(nextTile[1], player.getY(), 0.001);
@@ -65,7 +70,7 @@ public class FightControllerPlayerTest {
         int ap = player.getActionPoints();
         //when
         when(mapController.nextTileIsAccessible(player)).thenReturn(false);
-        controller.playerMoves(1);
+        controller.move(1);
         //then: player didn't move, no ap changed
         assertEquals(x, player.getX(), 0.001);
         assertEquals(y, player.getY(), 0.001);
@@ -80,7 +85,7 @@ public class FightControllerPlayerTest {
         int ap = player.getActionPoints();
         //when
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.playerMoves(1);
+        controller.move(1);
         //then: player not moved, ap same
         assertEquals(player.getX(), player.getX(), 0.001);
         assertEquals(player.getY(), player.getY(), 0.001);
@@ -93,10 +98,9 @@ public class FightControllerPlayerTest {
         int ap = player.getActionPoints();
         int oneShot = player.getActiveWeapon().getApForOneAttack();
         //when
-        controller.playerAttacks(1);
-        controller.playerAttacks(1);
+        controller.attack(1);
+        controller.attack(1);
         //then: bullets +2, ap reduced, other branch not accessed
-        List<? extends MapEntity> bullets = controller.getBullets();
         assertEquals(2, bullets.size());
         assertEquals(ap - 2 * oneShot, player.getActionPoints());
         verify(mapController, never()).getCoordinatesOfNextTile(player);
@@ -111,10 +115,10 @@ public class FightControllerPlayerTest {
         float[] nextTile = new float[]{enemy.getX(), enemy.getY()};
         //when
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.playerAttacks(1);
+        controller.attack(1);
         //then: no bullet added to bullets, enemy's health reduced, message not null
-        assertEquals(0, controller.getBullets().size());
+        assertEquals(0, bullets.size());
         assertTrue(enemy.getHealth() < initialHealth);
-        assertNotNull(controller.getMessage());
+        assertNotNull(controller.getFightController().getMessage());
     }
 }
