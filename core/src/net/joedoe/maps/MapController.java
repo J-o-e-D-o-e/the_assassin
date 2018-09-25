@@ -33,16 +33,16 @@ public class MapController {
     public float[] getCoordinatesOfNextTile(MapEntity mapEntity) {
         float[] nextTile = new float[]{mapEntity.getX(), mapEntity.getY()};
         switch (mapEntity.getDirection()) {
-            case 1: // N
+            case UP:
                 nextTile[1] += ONE_TILE;
                 break;
-            case 2: // W
+            case LEFT:
                 nextTile[0] -= ONE_TILE;
                 break;
-            case 3: // S
+            case DOWN:
                 nextTile[1] -= ONE_TILE;
                 break;
-            case 4: // E
+            case RIGHT:
                 nextTile[0] += ONE_TILE;
                 break;
         }

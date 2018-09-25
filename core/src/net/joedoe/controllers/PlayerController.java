@@ -6,6 +6,7 @@ import net.joedoe.entities.Bullet;
 import net.joedoe.entities.Enemy;
 import net.joedoe.entities.Player;
 import net.joedoe.maps.MapController;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameInfo;
 import net.joedoe.utils.GameManager;
 
@@ -33,7 +34,7 @@ public class PlayerController implements IPlayerController {
     }
 
     @Override
-    public void move(int direction) {
+    public void move(Direction direction) {
         player.setDirection(direction);
         if (mapController.nextTileIsAccessible(player) && !collidesWithEnemy())
             player.move();
@@ -48,7 +49,7 @@ public class PlayerController implements IPlayerController {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void attack(int direction) {
+    public void attack(Direction direction) {
         player.setDirection(direction);
         if (player.checkIfShoot()) {
             List<Bullet> bullets = (List<Bullet>) fightController.getBullets();

@@ -22,6 +22,7 @@ import net.joedoe.listeners.InputListenerFight;
 import net.joedoe.listeners.PauseListener;
 import net.joedoe.listeners.StoryListener;
 import net.joedoe.pathfinding.Node;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameManager;
 
 import java.util.List;
@@ -148,7 +149,7 @@ public class FightScreen implements IScreen {
         List<? extends MapEntity> bullets = fightController.getBullets();
         if (!bullets.isEmpty())
             for (MapEntity bullet : bullets)
-                if (bullet.getDirection() == 1 || bullet.getDirection() == 3)
+                if (bullet.getDirection() == Direction.UP || bullet.getDirection() == Direction.DOWN)
                     game.getBatch().draw(bulletVerticalTexture, bullet.getX(), bullet.getY(), ONE_TILE, ONE_TILE);
                 else
                     game.getBatch().draw(bulletHorizontalTexture, bullet.getX(), bullet.getY(), ONE_TILE, ONE_TILE);

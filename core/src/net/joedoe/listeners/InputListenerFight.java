@@ -3,6 +3,7 @@ package net.joedoe.listeners;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import net.joedoe.controllers.IPlayerController;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameManager;
 
 public class InputListenerFight extends InputAdapter {
@@ -17,28 +18,28 @@ public class InputListenerFight extends InputAdapter {
         if (!GameManager.isPaused && !GameManager.storyMode && !controller.isTurnOver()) {
             switch (keycode) {
                 case (Input.Keys.UP):
-                    controller.move(1);
+                    controller.move(Direction.UP);
                     break;
                 case (Input.Keys.LEFT):
-                    controller.move(2);
+                    controller.move(Direction.LEFT);
                     break;
                 case (Input.Keys.DOWN):
-                    controller.move(3);
+                    controller.move(Direction.DOWN);
                     break;
                 case (Input.Keys.RIGHT):
-                    controller.move(4);
+                    controller.move(Direction.RIGHT);
                     break;
                 case (Input.Keys.W):
-                    controller.attack(1);
+                    controller.attack(Direction.UP);
                     break;
                 case (Input.Keys.A):
-                    controller.attack(2);
+                    controller.attack(Direction.LEFT);
                     break;
                 case (Input.Keys.S):
-                    controller.attack(3);
+                    controller.attack(Direction.DOWN);
                     break;
                 case (Input.Keys.D):
-                    controller.attack(4);
+                    controller.attack(Direction.RIGHT);
                     break;
                 case (Input.Keys.NUM_1):
                     controller.changeWeapon(0);

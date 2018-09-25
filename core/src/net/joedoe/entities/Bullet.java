@@ -2,6 +2,7 @@ package net.joedoe.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.joedoe.utils.Direction;
 
 import static net.joedoe.utils.GameInfo.*;
 
@@ -9,13 +10,13 @@ import static net.joedoe.utils.GameInfo.*;
 @Setter
 public class Bullet implements MapEntity {
     protected float x, y;
-    protected int direction;
+    protected Direction direction;
     private int range;
     private int damage;
     private String weaponName;
     private boolean remove;
 
-    Bullet(float x, float y, int direction, int range, int damage, String weaponName) {
+    Bullet(float x, float y, Direction direction, int range, int damage, String weaponName) {
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -27,16 +28,16 @@ public class Bullet implements MapEntity {
     public void move() {
         range -= 1;
         switch (direction) {
-            case 1: // N
+            case UP:
                 y += ONE_TILE;
                 break;
-            case 2: // W
+            case LEFT:
                 x -= ONE_TILE;
                 break;
-            case 3: // S
+            case DOWN:
                 y -= ONE_TILE;
                 break;
-            case 4: // E
+            case RIGHT:
                 x += ONE_TILE;
                 break;
         }

@@ -1,10 +1,12 @@
 package net.joedoe.controllers;
 
+import net.joedoe.utils.Direction;
+
 public interface IPlayerController {
 
-    void move(int direction);
+    void move(Direction direction);
 
-    void attack(int direction);
+    void attack(Direction direction);
 
     void changeWeapon(int choice);
 

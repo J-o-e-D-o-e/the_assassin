@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.joedoe.pathfinding.ManhattanHeuristic;
 import net.joedoe.pathfinding.Node;
+import net.joedoe.utils.Direction;
 
 import static net.joedoe.utils.GameInfo.*;
 
@@ -13,46 +14,46 @@ import static net.joedoe.utils.GameInfo.*;
 public abstract class EnemyEntity implements MapEntity {
     protected String name;
     protected float x, y;
-    protected int direction;
+    protected Direction direction;
     protected DefaultGraphPath<Node> path = new DefaultGraphPath<>();
     protected ManhattanHeuristic heuristic = new ManhattanHeuristic();
     protected int pathIndex = 1;
 
     public void setDirection() {
         if (getNextNode().getY() * ONE_TILE > y)
-            direction = 1; // N
+            direction = Direction.UP;
         if (getNextNode().getX() * ONE_TILE < x)
-            direction = 2; // W
+            direction = Direction.LEFT;
         if (getNextNode().getY() * ONE_TILE < y)
-            direction = 3; // S
+            direction = Direction.DOWN;
         if (getNextNode().getX() * ONE_TILE > x)
-            direction = 4; // E
+            direction = Direction.RIGHT;
     }
 
     public void move() {
         switch (direction) {
-            case 1: // N
+            case UP:
                 pathIndex++;
                 y += ONE_TILE;
                 if (y > HEIGHT - ONE_TILE) {
                     y = HEIGHT - ONE_TILE;
                 }
                 break;
-            case 2: // W
+            case LEFT:
                 pathIndex++;
                 x -= ONE_TILE;
                 if (x < 0) {
                     x = 0;
                 }
                 break;
-            case 3: // S
+            case DOWN:
                 pathIndex++;
                 y -= ONE_TILE;
                 if (y < 0) {
                     y = 0;
                 }
                 break;
-            case 4: // E
+            case RIGHT:
                 pathIndex++;
                 x += ONE_TILE;
                 if (x > WIDTH - ONE_TILE) {
@@ -63,7 +64,7 @@ public abstract class EnemyEntity implements MapEntity {
     }
 
     public int calculateDistance() {
-        return  path.getCount() - pathIndex;
+        return path.getCount() - pathIndex;
     }
 
     Node getCurrentNode() {

@@ -110,7 +110,7 @@ public class Enemy extends EnemyEntity {
     }
 
     public void calculatePath(Graph graph, MapEntity player, List<Enemy> enemies) {
-        ArrayList<Enemy> otherEnemies = enemies.stream().filter(enemy -> enemy != this).collect(Collectors.toCollection(ArrayList::new));
+        List<Enemy> otherEnemies = enemies.stream().filter(enemy -> enemy != this).collect(Collectors.toCollection(ArrayList::new));
         for (Enemy enemy : otherEnemies) {
             Node enemyNode = graph.getNodeByCoordinates(enemy.getX(), enemy.getY());
             for (Node node : graph.getNodes())

@@ -2,6 +2,7 @@ package net.joedoe.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.joedoe.utils.Direction;
 import net.joedoe.weapons.Weapon;
 
 import static net.joedoe.utils.GameInfo.*;
@@ -12,7 +13,7 @@ import static net.joedoe.utils.GameInfo.*;
 @Setter
 public abstract class PlayerEntity implements MapEntity {
     protected float x, y;
-    protected int direction;
+    protected Direction direction;
     protected String name;
     protected int health;
     protected int strength, dexterity, intelligence;
@@ -23,22 +24,22 @@ public abstract class PlayerEntity implements MapEntity {
 
     public void move() {
         switch (direction) {
-            case 1: // N
+            case UP:
                 if (y + ONE_TILE == HEIGHT)
                     return;
                 y += ONE_TILE;
                 break;
-            case 2: // W
+            case LEFT:
                 if (x == 0)
                     return;
                 x -= ONE_TILE;
                 break;
-            case 3: // S
+            case DOWN:
                 if (y == 0)
                     return;
                 y -= ONE_TILE;
                 break;
-            case 4: // E
+            case RIGHT:
                 if (x + ONE_TILE == WIDTH)
                     return;
                 x += ONE_TILE;
