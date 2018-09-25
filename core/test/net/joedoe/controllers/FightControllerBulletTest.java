@@ -5,6 +5,7 @@ import net.joedoe.entities.Bullet;
 import net.joedoe.entities.Enemy;
 import net.joedoe.entities.Player;
 import net.joedoe.maps.MapController;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameInfo;
 import net.joedoe.utils.GameManager;
 import org.junit.Before;
@@ -41,7 +42,7 @@ public class FightControllerBulletTest {
         controller = new FightController();
         controller.setMapController(mapController);
         player = controller.getPlayer();
-        player.setDirection(1);
+        player.setDirection(Direction.UP);
         enemy = (Enemy) controller.getEnemies().get(0);
         //noinspection unchecked
         List<Bullet> bullets = (List<Bullet>) controller.getBullets();

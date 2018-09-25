@@ -1,5 +1,6 @@
 package net.joedoe.entities;
 
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameInfo;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class BulletTest {
 
     @Before
     public void setUp() {
-        bullet = new Bullet(0, 0, 1, 1, 1, "Pistol");
+        bullet = new Bullet(0, 0, Direction.UP, 1, 1, "Pistol");
     }
 
     @Test
@@ -31,7 +32,7 @@ public class BulletTest {
     @Test
     public void outOfMap() {
         //given
-        bullet.setDirection(2);
+        bullet.setDirection(Direction.LEFT);
         //when
         bullet.move();
         //then

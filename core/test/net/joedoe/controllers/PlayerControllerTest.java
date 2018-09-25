@@ -5,6 +5,7 @@ import net.joedoe.entities.Bullet;
 import net.joedoe.entities.Enemy;
 import net.joedoe.entities.Player;
 import net.joedoe.maps.MapController;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameInfo;
 import net.joedoe.utils.GameManager;
 import org.junit.Before;
@@ -22,7 +23,6 @@ import static org.mockito.Mockito.*;
 @RunWith(GdxTestRunner.class)
 public class PlayerControllerTest {
     private PlayerController controller;
-    private FightController fightController;
     @Mock
     private MapController mapController;
     private Player player;
@@ -40,7 +40,7 @@ public class PlayerControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        fightController = new FightController();
+        FightController fightController = new FightController();
         controller = new PlayerController(fightController);
         controller.setMapController(mapController);
         player = controller.getPlayer();
@@ -55,7 +55,7 @@ public class PlayerControllerTest {
         //when
         when(mapController.nextTileIsAccessible(player)).thenReturn(true);
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.move(1);
+        controller.move(Direction.UP);
         //then: player moved, playerCollidesWithEnemy() executed
         assertEquals(nextTile[0], player.getX(), 0.001);
         assertEquals(nextTile[1], player.getY(), 0.001);
@@ -70,7 +70,7 @@ public class PlayerControllerTest {
         int ap = player.getActionPoints();
         //when
         when(mapController.nextTileIsAccessible(player)).thenReturn(false);
-        controller.move(1);
+        controller.move(Direction.UP);
         //then: player didn't move, no ap changed
         assertEquals(x, player.getX(), 0.001);
         assertEquals(y, player.getY(), 0.001);
@@ -85,7 +85,7 @@ public class PlayerControllerTest {
         int ap = player.getActionPoints();
         //when
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.move(1);
+        controller.move(Direction.UP);
         //then: player not moved, ap same
         assertEquals(player.getX(), player.getX(), 0.001);
         assertEquals(player.getY(), player.getY(), 0.001);
@@ -98,8 +98,8 @@ public class PlayerControllerTest {
         int ap = player.getActionPoints();
         int oneShot = player.getActiveWeapon().getApForOneAttack();
         //when
-        controller.attack(1);
-        controller.attack(1);
+        controller.attack(Direction.UP);
+        controller.attack(Direction.UP);
         //then: bullets +2, ap reduced, other branch not accessed
         assertEquals(2, bullets.size());
         assertEquals(ap - 2 * oneShot, player.getActionPoints());
@@ -115,7 +115,7 @@ public class PlayerControllerTest {
         float[] nextTile = new float[]{enemy.getX(), enemy.getY()};
         //when
         when(mapController.getCoordinatesOfNextTile(player)).thenReturn(nextTile);
-        controller.attack(1);
+        controller.attack(Direction.UP);
         //then: no bullet added to bullets, enemy's health reduced, message not null
         assertEquals(0, bullets.size());
         assertTrue(enemy.getHealth() < initialHealth);

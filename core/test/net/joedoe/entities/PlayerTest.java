@@ -1,6 +1,7 @@
 package net.joedoe.entities;
 
 import net.joedoe.GdxTestRunner;
+import net.joedoe.utils.Direction;
 import net.joedoe.utils.GameInfo;
 import net.joedoe.utils.GameManager;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class PlayerTest {
     public void move() {
         //given
         int ap = player.getActionPoints();
-        player.setDirection(1);
+        player.setDirection(Direction.UP);
         //when
         player.move();
         //then: player moved
@@ -40,7 +41,7 @@ public class PlayerTest {
     public void moveOutOfMap(){
         //given
         int ap = player.getActionPoints();
-        player.setDirection(3);
+        player.setDirection(Direction.DOWN);
         //when
         player.move();
         //then: player not moved, no ap changed

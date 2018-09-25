@@ -28,13 +28,13 @@ public class GraphGenerator {
             for (int x = 0; x < MAP_WIDTH; x++)
                 if (layer.getCell(x, y) == null) { // current cell is accessible
                     Node currentNode = nodes.get(x + MAP_WIDTH * y);
-                    if (layer.getCell(x, (y + 1)) == null && y != MAP_HEIGHT - 1)  // N
+                    if (layer.getCell(x, (y + 1)) == null && y != MAP_HEIGHT - 1)  // UP
                         currentNode.addConnection(nodes.get(x + MAP_WIDTH * (y + 1)));
-                    if (layer.getCell((x - 1), y) == null && x != 0)  // W
+                    if (layer.getCell((x - 1), y) == null && x != 0)  // LEFT
                         currentNode.addConnection(nodes.get((x - 1) + MAP_WIDTH * y));
-                    if (layer.getCell(x, (y - 1)) == null && y != 0) // S
+                    if (layer.getCell(x, (y - 1)) == null && y != 0) // DOWN
                         currentNode.addConnection(nodes.get(x + MAP_WIDTH * (y - 1)));
-                    if (layer.getCell((x + 1), y) == null && x != MAP_WIDTH - 1) // E
+                    if (layer.getCell((x + 1), y) == null && x != MAP_WIDTH - 1) // SOUTH
                         currentNode.addConnection(nodes.get((x + 1) + MAP_WIDTH * y));
                 }
         return nodes;
