@@ -13,9 +13,8 @@ The .apk-file with the current (2nd) version is available [here](https://db.tt/w
 ![android](https://user-images.githubusercontent.com/26798159/55293566-0016cd80-53f8-11e9-836d-845c93f4f98c.PNG)
 
 ## Desktop/dev
-- Use gradle wrapper to build app
-- Enable annotation processing (for lombok)
-- Change working directory to `/core/assets` and run DesktopLauncher or `gradle desktop:run`
+- Run `gradle desktop:run` or gradle wrapper
+- For IDE: Enable annotation processing (for lombok) and change working directory to `/core/assets`
 
 ![fightscreen](https://user-images.githubusercontent.com/26798159/45308658-45d67c00-b522-11e8-8aa0-2dc7f547bc92.png)
 
