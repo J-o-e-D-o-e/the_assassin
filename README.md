@@ -13,7 +13,7 @@ The .apk-file with the current (2nd) version is available [here](https://db.tt/w
 ![android](https://user-images.githubusercontent.com/26798159/55293566-0016cd80-53f8-11e9-836d-845c93f4f98c.PNG)
 
 ## Desktop/dev
-- Run `gradle desktop:run` or gradle wrapper. Navigate to `http://localhost:8080/`.
+- Run `gradle desktop:run` or gradle wrapper.
 - IDE: Enable annotation processing (for lombok) and change working directory to `/core/assets`.
 - In the game, press `p` to see controls info.
 
